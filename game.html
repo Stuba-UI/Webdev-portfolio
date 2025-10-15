@@ -25,9 +25,12 @@
             top: 20px;
             left: 20px;
             z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        .add-btn {
+        .add-btn, .home-btn {
             background: var(--glass);
             border: 1px solid color-mix(in srgb,var(--text) 10%,transparent);
             color: var(--text);
@@ -35,109 +38,101 @@
             padding: 8px 12px;
             cursor: pointer;
             font-size: 1rem;
-            margin-bottom: 8px;
+            text-decoration: none;
+            text-align: center;
         }
 
         .home-btn {
-            display: inline-block;
-            background: var(--glass);
-            border: 1px solid color-mix(in srgb,var(--text) 10%,transparent);
-            border-radius: 10px;
-            padding: 8px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            text-decoration: none;
-            color: var(--text);
+            font-size: 1.2rem;
         }
     </style>
 </head>
 <body>
+
     <canvas id="canvas"></canvas>
 
     <div class="controls">
-        <button class="add-btn" id="addParticlesBtn">Add Particles</button>
-        <a href="index.html" class="home-btn">🏠</a>
+        <button class="add-btn" id="addParticlesBtn">➕ Add Particles</button>
+        <a href="index.html" class="home-btn">🏠 Home</a>
     </div>
 
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        let particles = [];
-        let mouse = { x: null, y: null };
-        const maxDist = 120; // max distance for connecting lines
 
-        function resize() {
+        let particles = [];
+        let particleCount = 60;
+        let mouse = { x: null, y: null };
+        let touches = [];
+
+        function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', resize);
-        resize();
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
         class Particle {
             constructor() { this.reset(); }
             reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 2;
-                this.vy = (Math.random() - 0.5) * 2;
-                this.size = Math.random() * 6 + 2;
-                this.color = `hsl(${Math.random() * 360}, 70%, 60%)`;
+                this.vx = (Math.random() - 0.5) * 1.2;
+                this.vy = (Math.random() - 0.5) * 1.2;
+                this.size = Math.random() * 3 + 1;
             }
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-
                 if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
                 if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
 
-                // Attraction to pointer
-                if (mouse.x && mouse.y) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 150) { // attraction radius
-                        this.vx += dx * 0.002;
-                        this.vy += dy * 0.002;
+                let points = [mouse, ...touches];
+                points.forEach(p => {
+                    if (p.x !== null && p.y !== null) {
+                        let dx = p.x - this.x;
+                        let dy = p.y - this.y;
+                        let dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 150) { this.vx += dx * 0.002; this.vy += dy * 0.002; }
                     }
-                }
+                });
             }
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
+                ctx.fillStyle = 'white';
                 ctx.fill();
             }
         }
 
-        function addParticles(count = 20) {
-            for (let i = 0; i < count; i++) particles.push(new Particle());
-        }
+        function initParticles(n) { for (let i = 0; i < n; i++) particles.push(new Particle()); }
+        initParticles(particleCount);
 
-        addParticles(50);
-
-        document.getElementById('addParticlesBtn').addEventListener('click', () => addParticles(30));
-
-        canvas.addEventListener('mousemove', e => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        });
+        canvas.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
         canvas.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
 
-        function backgroundColorByTime() {
-            const now = new Date();
-            const hour = now.getHours() + now.getMinutes() / 60;
-            const hue = 200 + (hour / 24) * 160;
-            document.body.style.background = `hsl(${hue},50%,10%)`;
-        }
+        canvas.addEventListener('touchstart', e => { e.preventDefault(); touches = Array.from(e.touches).map(t => ({ x: t.clientX, y: t.clientY })); }, { passive: false });
+        canvas.addEventListener('touchmove', e => { e.preventDefault(); touches = Array.from(e.touches).map(t => ({ x: t.clientX, y: t.clientY })); }, { passive: false });
+        canvas.addEventListener('touchend', e => { e.preventDefault(); touches = Array.from(e.touches).map(t => ({ x: t.clientX, y: t.clientY })); }, { passive: false });
 
-        function connectParticles() {
+        document.getElementById('addParticlesBtn').addEventListener('click', () => { initParticles(20); });
+
+        function animate() {
+            let date = new Date();
+            let hue = (date.getSeconds() / 60) * 360;
+            ctx.fillStyle = `hsl(${hue},20%,10%)`;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(p => p.update());
+            particles.forEach(p => p.draw());
+
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     let dx = particles[i].x - particles[j].x;
                     let dy = particles[i].y - particles[j].y;
                     let dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < maxDist) {
-                        ctx.strokeStyle = `rgba(200,200,255,${1 - dist / maxDist})`;
+                    if (dist < 120) {
+                        ctx.strokeStyle = `rgba(255,255,255,${1 - dist / 120})`;
                         ctx.lineWidth = 1;
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
@@ -146,21 +141,11 @@
                     }
                 }
             }
-        }
 
-        function animate() {
-            backgroundColorByTime();
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            connectParticles();
             requestAnimationFrame(animate);
         }
-
         animate();
-
     </script>
+
 </body>
 </html>
