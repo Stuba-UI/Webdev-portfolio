@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Canvas Demo — Tuomas Lehto</title>
+    <link rel="stylesheet" href="StyleSheet1.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: var(--bg);
+        }
+
+        #canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+        }
+
+        .add-btn {
+            background: var(--glass);
+            border: 1px solid color-mix(in srgb,var(--text) 10%,transparent);
+            color: var(--text);
+            border-radius: 10px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .home-btn {
+            display: inline-block;
+            background: var(--glass);
+            border: 1px solid color-mix(in srgb,var(--text) 10%,transparent);
+            border-radius: 10px;
+            padding: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div class="controls">
+        <button class="add-btn" id="addParticlesBtn">Add Particles</button>
+        <a href="index.html" class="home-btn">🏠</a>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+        const maxDist = 120; // max distance for connecting lines
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+                this.size = Math.random() * 6 + 2;
+                this.color = `hsl(${Math.random() * 360}, 70%, 60%)`;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+
+                // Attraction to pointer
+                if (mouse.x && mouse.y) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) { // attraction radius
+                        this.vx += dx * 0.002;
+                        this.vy += dy * 0.002;
+                    }
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        function addParticles(count = 20) {
+            for (let i = 0; i < count; i++) particles.push(new Particle());
+        }
+
+        addParticles(50);
+
+        document.getElementById('addParticlesBtn').addEventListener('click', () => addParticles(30));
+
+        canvas.addEventListener('mousemove', e => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        canvas.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+
+        function backgroundColorByTime() {
+            const now = new Date();
+            const hour = now.getHours() + now.getMinutes() / 60;
+            const hue = 200 + (hour / 24) * 160;
+            document.body.style.background = `hsl(${hue},50%,10%)`;
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < maxDist) {
+                        ctx.strokeStyle = `rgba(200,200,255,${1 - dist / maxDist})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            backgroundColorByTime();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            connectParticles();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+    </script>
+</body>
+</html>

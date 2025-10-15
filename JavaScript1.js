@@ -96,6 +96,23 @@ function createChart(lang) {
 }
 createChart('en');
 
+fetch('https://api.github.com/users/Stuba-UI/repos?sort=updated')
+    .then(res => res.json())
+    .then(repos => {
+        const list = document.getElementById('github-projects');
+        repos.forEach(repo => {
+            const div = document.createElement('div');
+            div.className = 'project';
+            div.innerHTML = `
+        <h4>${repo.name}</h4>
+        <p>${repo.description || 'No description'}</p>
+        <a href="${repo.html_url}" target="_blank">View on GitHub</a>
+      `;
+            list.appendChild(div);
+        });
+    });
+
+
 // Language toggle
 const langToggle = document.getElementById("langToggle");
 langToggle.addEventListener("click", () => {

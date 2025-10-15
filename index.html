@@ -28,6 +28,7 @@
                 <button class="theme-toggle" id="themeToggle" title="Toggle theme">🌗</button>
                 <button id="langToggle" title="Toggle language">EN/FI</button>
                 <a class="cv-btn" id="cvBtn" href="English Version – Tuomas Lehto CV.pdf" download>Download CV</a>
+                <button class="cv-btn" onclick="location.href='game.html'" title="Interactive Playground">🎮</button>
             </div>
         </header>
 
@@ -72,6 +73,15 @@
                             Visual skill overview — useful for clients to quickly scan strengths.
                         </p>
                     </div>
+
+                    <!-- GitHub Projects Section -->
+                    <div class="card reveal" data-delay="250" style="margin-top:16px">
+                        <h3 data-en="GitHub Projects" data-fi="GitHub-projektit">GitHub Projects</h3>
+                        <div id="github-projects" class="projects">
+                            <!-- Repos will be dynamically inserted here via JS -->
+                        </div>
+                    </div>
+
 
                 </section>
 
