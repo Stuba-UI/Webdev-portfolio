@@ -240,9 +240,12 @@ main {
 }
 
 .skill-chart {
-    height: 200px;
+    width: 100% !important;
     max-width: 100%;
+    height: auto !important;
+    aspect-ratio: 3 / 1; /* adjust ratio as needed */
 }
+
 
 /* 🌐 CONTACT FORM */
 .contact-form {
