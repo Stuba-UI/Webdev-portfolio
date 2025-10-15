@@ -81,7 +81,7 @@ function createChart(lang) {
             labels: labels,
             datasets: [{
                 label: lang === 'fi' ? 'Taitotaso' : 'Skill level',
-                data: [90, 85, 80, 70, 75, 60],
+                data: [90, 85, 80, 90, 75, 60],
                 backgroundColor: 'rgba(96,165,250,0.6)',
                 borderColor: 'rgba(96,165,250,1)',
                 borderWidth: 1
