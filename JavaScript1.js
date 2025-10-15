@@ -128,7 +128,7 @@ langToggle.addEventListener("click", () => {
     const cvBtn = document.getElementById("cvBtn");
     cvBtn.href = currentLang === "en"
         ? "English Version – Tuomas Lehto CV.pdf"
-        : "Finnish Version – Tuomas Lehto CV.pdf";
+        : "English Version – Tuomas Lehto CV.pdf";
 
     // Update chart language
     createChart(currentLang);
