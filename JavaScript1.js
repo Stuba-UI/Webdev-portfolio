@@ -1,6 +1,4 @@
-﻿// JavaScript1.js
-
-// Theme toggle
+﻿// Theme toggle
 const toggle = document.getElementById('themeToggle');
 toggle.addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme');
@@ -26,19 +24,16 @@ type();
 
 // Reveal on scroll
 const reveals = document.querySelectorAll('.reveal');
-
 function reveal() {
     for (let i = 0; i < reveals.length; i++) {
         const windowHeight = window.innerHeight;
         const elementTop = reveals[i].getBoundingClientRect().top;
         const revealPoint = 150;
-
         if (elementTop < windowHeight - revealPoint) {
             reveals[i].classList.add('visible');
         }
     }
 }
-
 window.addEventListener('scroll', reveal);
 reveal();
 
@@ -60,14 +55,64 @@ projectButtons.forEach(btn => {
     });
 });
 
-projectSearch.addEventListener('input', () => {
+projectSearch?.addEventListener('input', () => {
     const term = projectSearch.value.toLowerCase();
     projects.forEach(p => {
         const title = p.querySelector('h4').textContent.toLowerCase();
-        if (title.includes(term)) {
-            p.style.display = 'flex';
-        } else {
-            p.style.display = 'none';
+        p.style.display = title.includes(term) ? 'flex' : 'none';
+    });
+});
+
+// Skill chart setup
+const ctx = document.getElementById('skillChart').getContext('2d');
+let currentLang = 'en';
+let skillChart;
+
+function createChart(lang) {
+    const labels = lang === 'fi'
+        ? ['HTML', 'CSS', 'JavaScript', 'Python', 'Git', 'Suunnittelu']
+        : ['HTML', 'CSS', 'JavaScript', 'Python', 'Git', 'Design'];
+
+    if (skillChart) skillChart.destroy();
+
+    skillChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: lang === 'fi' ? 'Taitotaso' : 'Skill level',
+                data: [90, 85, 80, 70, 75, 60],
+                backgroundColor: 'rgba(96,165,250,0.6)',
+                borderColor: 'rgba(96,165,250,1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true }
+            }
         }
     });
+}
+createChart('en');
+
+// Language toggle
+const langToggle = document.getElementById("langToggle");
+langToggle.addEventListener("click", () => {
+    currentLang = currentLang === "en" ? "fi" : "en";
+
+    document.querySelectorAll("[data-en]").forEach(el => {
+        if (!["INPUT", "TEXTAREA", "CANVAS"].includes(el.tagName)) {
+            el.textContent = el.getAttribute(`data-${currentLang}`);
+        }
+    });
+
+    // Update CV link
+    const cvBtn = document.getElementById("cvBtn");
+    cvBtn.href = currentLang === "en"
+        ? "English Version – Tuomas Lehto CV.pdf"
+        : "Finnish Version – Tuomas Lehto CV.pdf";
+
+    // Update chart language
+    createChart(currentLang);
 });

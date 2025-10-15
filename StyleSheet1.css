@@ -8,6 +8,7 @@
     --accent: #7dd3fc;
     --accent-2: #60a5fa;
     --glass: rgba(255,255,255,0.04);
+    --shadow: rgba(2,6,23,0.5);
 }
 
 [data-theme="light"] {
@@ -18,6 +19,7 @@
     --accent: #0369a1;
     --accent-2: #2563eb;
     --glass: rgba(11,17,32,0.04);
+    --shadow: rgba(0,0,0,0.1);
 }
 
 * {
@@ -30,6 +32,7 @@ html, body {
     font-family: Inter, system-ui, Segoe UI, Roboto, 'Helvetica Neue', Arial;
     background: linear-gradient(180deg, var(--bg), color-mix(in srgb, var(--bg) 80%, transparent));
     color: var(--text);
+    scroll-behavior: smooth;
 }
 
 .container {
@@ -63,7 +66,7 @@ header {
     justify-content: center;
     font-weight: 700;
     color: var(--card);
-    box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+    box-shadow: 0 6px 18px var(--shadow);
 }
 
 h1 {
@@ -128,7 +131,7 @@ main {
     background: var(--card);
     padding: 18px;
     border-radius: 14px;
-    box-shadow: 0 6px 18px rgba(2,6,23,0.5);
+    box-shadow: 0 6px 18px var(--shadow);
 }
 
 .about p {
@@ -202,7 +205,7 @@ main {
 
     .project:hover {
         transform: translateY(-6px);
-        box-shadow: 0 12px 28px rgba(2,6,23,0.5);
+        box-shadow: 0 12px 28px var(--shadow);
     }
 
 .proj-thumb {
@@ -239,6 +242,73 @@ main {
 .skill-chart {
     height: 200px;
     max-width: 100%;
+}
+
+/* 🌐 CONTACT FORM */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+    .contact-form label {
+        font-weight: 600;
+        color: var(--text);
+        font-size: 0.95rem;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--muted);
+        border-radius: 8px;
+        background: var(--card);
+        color: var(--text);
+        font-size: 0.95rem;
+        transition: border 0.2s, box-shadow 0.2s;
+        font-family: inherit;
+        resize: vertical;
+    }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px color-mix(in srgb,var(--accent) 40%, transparent);
+        }
+
+    .contact-form button {
+        margin-top: 6px;
+        padding: 10px 14px;
+        border: none;
+        border-radius: 10px;
+        background: var(--accent-2);
+        color: var(--card);
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+    }
+
+        .contact-form button:hover {
+            background: var(--accent);
+            transform: translateY(-1px);
+        }
+
+/* Make form responsive */
+@media (max-width: 480px) {
+    .contact-form input,
+    .contact-form textarea {
+        font-size: 0.9rem;
+        padding: 8px 10px;
+    }
+
+    .contact-form button {
+        font-size: 0.9rem;
+        padding: 9px 12px;
+    }
 }
 
 .contact-list {

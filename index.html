@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="StyleSheet1.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script defer src="JavaScript1.js"></script>
-
 </head>
 <body>
     <div class="container" id="page">
@@ -18,13 +18,16 @@
                 <div class="avatar">TL</div>
                 <div>
                     <h1>Tuomas Lehto</h1>
-                    <p class="lead">Web Developer & Python Freelancer</p>
+                    <p class="lead" id="leadText" data-en="Web Developer & Python Freelancer" data-fi="Verkkokehittäjä & Python-freelancer">
+                        Web Developer & Python Freelancer
+                    </p>
                 </div>
             </div>
 
             <div class="controls">
                 <button class="theme-toggle" id="themeToggle" title="Toggle theme">🌗</button>
-                <a class="cv-btn" id="cvBtn" href="#" download>Download CV</a>
+                <button id="langToggle" title="Toggle language">EN/FI</button>
+                <a class="cv-btn" id="cvBtn" href="English Version – Tuomas Lehto CV.pdf" download>Download CV</a>
             </div>
         </header>
 
@@ -34,102 +37,70 @@
 
                     <div class="card about reveal" data-delay="0">
                         <div class="intro">
-                            <div class="intro-line" id="typedIntro">I build fast, modern websites<span class="typed-cursor" id="cursor"></span></div>
-                            <p class="muted" style="margin-top:10px">Reliable, problem-solving developer. Focus on responsive sites, small business landing pages, and Python automation for repetitive tasks.</p>
+                            <div class="intro-line" id="typedIntro"
+                                 data-en="I build fast, modern websites"
+                                 data-fi="Rakennan nopeita, moderneja verkkosivuja">
+                                I build fast, modern websites<span class="typed-cursor" id="cursor"></span>
+                            </div>
+                            <p class="muted" id="aboutText"
+                               data-en="Reliable, problem-solving developer. Focus on responsive sites, small business landing pages, and Python automation for repetitive tasks."
+                               data-fi="Luotettava, ongelmanratkaisukykyinen kehittäjä. Painopiste responsiivisissa sivustoissa, pienyritysten laskeutumissivuilla ja Python-automaatiotehtävissä.">
+                                Reliable, problem-solving developer. Focus on responsive sites, small business landing pages, and Python automation for repetitive tasks.
+                            </p>
                         </div>
 
                         <div style="margin-top:14px">
-                            <h3>Skills</h3>
+                            <h3 data-en="Skills" data-fi="Taidot">Skills</h3>
                             <div class="skills">
                                 <div class="skill-pill">HTML</div>
                                 <div class="skill-pill">CSS</div>
                                 <div class="skill-pill">JavaScript</div>
-                                <div class="skill-pill">Responsive Design</div>
+                                <div class="skill-pill" data-en="Responsive Design" data-fi="Responsiivinen suunnittelu">Responsive Design</div>
                                 <div class="skill-pill">Git/GitHub</div>
-                                <div class="skill-pill">Python (automation)</div>
+                                <div class="skill-pill" data-en="Python (automation)" data-fi="Python (automaatio)">Python (automation)</div>
                                 <div class="skill-pill">Netlify / GitHub Pages</div>
                             </div>
-                        </div>
-
-                    </div>
-
-                    <div class="card projects-panel reveal" data-delay="100" style="margin-top:16px">
-                        <div class="controls-row">
-                            <input class="search" id="projectSearch" placeholder="Search projects... (try 'landing', 'python')">
-                            <button class="filter-btn" data-filter="all">All</button>
-                            <button class="filter-btn" data-filter="web">Web</button>
-                            <button class="filter-btn" data-filter="python">Python</button>
-                        </div>
-
-                        <div class="projects" id="projectsList">
-                            <!-- Project 1 -->
-                            <div class="project" data-category="web">
-                                <div class="proj-thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?q=80&w=800&auto=format&fit=crop&s=placeholder" alt="portfolio demo"></div>
-                                <div class="proj-body">
-                                    <h4>Landing page for café</h4>
-                                    <div class="muted">Responsive landing page with menu, contact form and fast load.</div>
-                                    <div style="margin-top:8px"><span class="tag">Web</span> <span class="tag">HTML/CSS</span></div>
-                                </div>
-                            </div>
-
-                            <!-- Project 2 -->
-                            <div class="project" data-category="web">
-                                <div class="proj-thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop&s=placeholder" alt="ecom demo"></div>
-                                <div class="proj-body">
-                                    <h4>Small e-commerce front</h4>
-                                    <div class="muted">Product grid, responsive filters and cart UI (static demo).</div>
-                                    <div style="margin-top:8px"><span class="tag">Web</span> <span class="tag">JavaScript</span></div>
-                                </div>
-                            </div>
-
-                            <!-- Project 3 -->
-                            <div class="project" data-category="python">
-                                <div class="proj-thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=800&auto=format&fit=crop&s=placeholder" alt="python demo"></div>
-                                <div class="proj-body">
-                                    <h4>File organizer script</h4>
-                                    <div class="muted">Python script that organizes downloads into folders by file type — delivered as an executable.</div>
-                                    <div style="margin-top:8px"><span class="tag">Python</span> <span class="tag">Automation</span></div>
-                                </div>
-                            </div>
-
-                            <!-- Project 4 -->
-                            <div class="project" data-category="web">
-                                <div class="proj-thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1508779018996-ec2d7d60f6b4?q=80&w=800&auto=format&fit=crop&s=placeholder" alt="portfolio demo"></div>
-                                <div class="proj-body">
-                                    <h4>Portfolio template</h4>
-                                    <div class="muted">A minimal, fast one-page portfolio template — easily customizable.</div>
-                                    <div style="margin-top:8px"><span class="tag">Web</span> <span class="tag">HTML/CSS</span></div>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
 
                     <div class="card chart-panel reveal" data-delay="200" style="margin-top:16px">
-                        <h3>Skill chart</h3>
+                        <h3 data-en="Skill chart" data-fi="Taitokaavio">Skill chart</h3>
                         <canvas id="skillChart" class="skill-chart" width="600" height="200"></canvas>
-                        <p class="muted" style="margin-top:8px">Visual skill overview — useful for clients to quickly scan strengths.</p>
+                        <p class="muted" style="margin-top:8px"
+                           data-en="Visual skill overview — useful for clients to quickly scan strengths."
+                           data-fi="Visuaalinen taitojen yhteenveto — hyödyllinen asiakkaille nopeaan arvioon.">
+                            Visual skill overview — useful for clients to quickly scan strengths.
+                        </p>
                     </div>
 
                 </section>
 
                 <aside class="right-col">
                     <div class="card contact-card reveal" data-delay="50">
-                        <h3>Contact</h3>
+                        <h3 data-en="Contact" data-fi="Yhteystiedot">Contact</h3>
                         <div class="contact-list">
-                            <div class="contact-item"><strong>Email:</strong> <a class="link" href="mailto:tuomas.lehto@example.com">tuomas.lehto@example.com</a></div>
-                            <div class="contact-item"><strong>GitHub:</strong> <a class="link" href="https://github.com/tuomaslehto" target="_blank">github.com/tuomaslehto</a></div>
-                            <div class="contact-item"><strong>Upwork / Fiverr:</strong> <span class="muted">Add your profile links here</span></div>
-                            <div style="margin-top:10px"><a class="cv-btn" href="#" download>Download CV</a></div>
+                            <div class="contact-item"><strong>Email:</strong> <a class="link" href="mailto:tuomas.lehto@saunalahti.fi">tuomas.lehto@saunalahti.fi</a></div>
+                            <div class="contact-item"><strong>GitHub:</strong> <a class="link" href="https://github.com/Stuba-UI" target="_blank">github.com/Stuba-UI</a></div>
                         </div>
+
+                        <form action="https://formspree.io/f/mwpraqee" method="POST" class="contact-form" style="margin-top:14px">
+                            <label for="email" data-en="Your email:" data-fi="Sähköpostisi:">Your email:</label>
+                            <input id="email" type="email" name="email" required>
+
+                            <label for="message" data-en="Your message:" data-fi="Viestisi:">Your message:</label>
+                            <textarea id="message" name="message" required rows="4"></textarea>
+
+                            <button type="submit" data-en="Send" data-fi="Lähetä">Send</button>
+                        </form>
                     </div>
 
                     <div class="card reveal" data-delay="120" style="margin-top:16px">
-                        <h3>Availability</h3>
-                        <p class="muted">Available for short-term freelance work. Fast delivery for landing pages, bug fixes and small web projects.</p>
-                        <div style="margin-top:10px">
-                            <a class="cv-btn" href="#" style="display:inline-block">Hire me</a>
-                        </div>
+                        <h3 data-en="Availability" data-fi="Saatavuus">Availability</h3>
+                        <p class="muted"
+                           data-en="Available for short-term freelance work. Fast delivery for landing pages, bug fixes and small web projects."
+                           data-fi="Saatavilla lyhytaikaisiin freelance-projekteihin. Nopea toimitus laskeutumissivuille, virheenkorjauksille ja pienille verkkoprojekteille.">
+                            Available for short-term freelance work. Fast delivery for landing pages, bug fixes and small web projects.
+                        </p>
                     </div>
                 </aside>
             </div>
@@ -138,8 +109,7 @@
                 Built by Tuomas Lehto • Deployed on GitHub Pages
             </footer>
         </main>
+
     </div>
-
-
 </body>
 </html>
